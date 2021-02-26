@@ -24,3 +24,11 @@ functions:
           path: browser-test
           method: get
           cors: true
+  bookGymTime:
+    handler: handler.bookGymTime
+    # The `events` block defines how to trigger the handler.bookGymTime code
+    events:
+      - http:
+          path: book-gym-time
+          method: get
+          cors: true
