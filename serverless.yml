@@ -9,6 +9,9 @@ service: fit4less-booking-bot
 
 frameworkVersion: '2'
 
+package:
+  exclude:
+  - .env
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
