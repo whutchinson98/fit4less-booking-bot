@@ -2,6 +2,8 @@
 require('dotenv').config();
 const chromium = require('chrome-aws-lambda');
 const latestDateSelector = 'div[id="modal_dates"] > div > div > div[class="modal-body"] > div > div:nth-child(3)';
+const mostRecentTimeSlotAvailable = 'div[class="time-slot"]:nth-child(1)';
+const confirmSelection = 'button[id="dialog_book_yes"]';
 
 module.exports.browserTest = async (event, context, callback) => {
   let result = null;
@@ -92,11 +94,16 @@ module.exports.bookGymTime = async (event, context, callback) => {
     await page.click('div[id=btn_date_select]');
 
     //Go to newest day
-    await page.click(latestDateSelector)
+    await page.click(latestDateSelector);
 
     //Select earliest time
+    await page.click(mostRecentTimeSlotAvailable);
 
     //Confirm
+    await page.click(confirmSelection);
+
+    result = "Booking confirmed";
+    
   } catch (error) {
 
     response.statusCode = 400;
