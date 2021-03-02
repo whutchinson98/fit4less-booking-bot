@@ -19,14 +19,6 @@ provider:
 
 # The `functions` block defines what code to deploy
 functions:
-  browserTest:
-    handler: handler.browserTest
-    # The `events` block defines how to trigger the handler.browserTest code
-    events:
-      - http:
-          path: browser-test
-          method: get
-          cors: true
   bookGymTime:
     handler: handler.bookGymTime
     # The `events` block defines how to trigger the handler.bookGymTime code

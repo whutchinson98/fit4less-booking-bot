@@ -1,7 +1,12 @@
 'use strict';
 require('dotenv').config();
 const chromium = require('chrome-aws-lambda');
+
+const email = process.env.FIT4LESS_EMAIL;
+const password = process.env.FIT4LESS_PASSWORD;
 const latestDateSelector = 'div[id="modal_dates"] > div > div > div[class="modal-body"] > div > div:nth-child(3)';
+const mostRecentTimeSlotAvailable = 'div[class="time-slot"]:nth-child(1)';
+const confirmSelection = 'button[id="dialog_book_yes"]';
 
 module.exports.browserTest = async (event, context, callback) => {
   let result = null;
@@ -73,16 +78,14 @@ module.exports.bookGymTime = async (event, context, callback) => {
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
     });
+
     let page = await browser.newPage();
-    await page.goto('https://myfit4less.gymmanager.com/portal/login.asp');
-    
+
     //Enter email and password
-    await page.click('#emailaddress');
-    await page.type('input[name=emailaddress]', process.env.FIT4LESS_EMAIL, {delay: 20});
-
-    await page.click('#password');
-    await page.type('input[name=password]', process.env.FIT4LESS_PASSWORD, {delay: 20});
-
+    await page.$eval('#emailaddress', (el, email) => {el.value = email}, email);
+    
+    await page.$eval('#password', (el, password) => {el.value = password}, password);
+    
     //Login
     await page.click('div[id=loginButton]');
 
@@ -90,13 +93,18 @@ module.exports.bookGymTime = async (event, context, callback) => {
 
     //Select day button
     await page.click('div[id=btn_date_select]');
-
+   
     //Go to newest day
-    await page.click(latestDateSelector)
-
+    await page.click(latestDateSelector);
+    
     //Select earliest time
+    await page.click(mostRecentTimeSlotAvailable);
 
     //Confirm
+    await page.click(confirmSelection);
+
+    result = "Booking confirmed";
+    
   } catch (error) {
 
     response.statusCode = 400;
