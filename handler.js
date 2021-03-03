@@ -83,7 +83,7 @@ module.exports.bookGymTime = async (event, context, callback) => {
 
     //Enter email and password
     await page.$eval('#emailaddress', (el, email) => {el.value = email}, email);
-    
+
     await page.$eval('#password', (el, password) => {el.value = password}, password);
     
     //Login
@@ -96,7 +96,7 @@ module.exports.bookGymTime = async (event, context, callback) => {
    
     //Go to newest day
     await page.click(latestDateSelector);
-    
+
     //Select earliest time
     await page.click(mostRecentTimeSlotAvailable);
 
