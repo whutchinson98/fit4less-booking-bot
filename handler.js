@@ -4,8 +4,10 @@ const chromium = require('chrome-aws-lambda');
 
 const email = process.env.FIT4LESS_EMAIL;
 const password = process.env.FIT4LESS_PASSWORD;
+const timeSlot = process.env.FIT4LESS_TIMESLOT;
+
 const latestDateSelector = 'div[id="modal_dates"] > div > div > div[class="modal-body"] > div > div:nth-child(3)';
-const mostRecentTimeSlotAvailable = 'div[class="time-slot"]:nth-child(1)';
+const mostRecentTimeSlotAvailable = `div[class="time-slot"]:nth-child(${timeSlot})`;
 const confirmSelection = 'button[id="dialog_book_yes"]';
 
 module.exports.bookGymTime = async (event, context, callback) => {
