@@ -50,7 +50,7 @@ module.exports.browserTest = async (event, context, callback) => {
   }
 
   response.body = JSON.stringify({
-    message: process.env.FIT4LESS_EMAIL
+    message: email
   });
 
   return callback(null, response);
