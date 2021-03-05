@@ -1,5 +1,6 @@
 # fit4less-booking-bot
-The fit4less booking bot is an Aws Lambda function that uses the `chrome-aws-lambda` node package. This bot goes into fit4less and books the most recent slot for the newest day that appointments are available.
+The fit4less booking bot is an Aws Lambda function that uses the
+[chrome-aws-lambda](https://github.com/alixaxel/chrome-aws-lambda "chrome-aws-lambda") node package. This bot goes into fit4less and books the most recent slot for the newest day that appointments are available.
 
 ## Setup
 - This uses serverless to deploy the lambda function to AWS and create an API trigger by default. Other triggers can be added in the `serverless.yml` file as you wish.
