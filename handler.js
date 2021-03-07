@@ -8,11 +8,10 @@ const timeSlot = process.env.FIT4LESS_TIMESLOT;
 const daySlot = process.env.FIT4LESS_DAYSLOT;
 
 const latestDateSelector = `div[id="modal_dates"] > div > div > div[class="modal-body"] > div > div:nth-child(${daySlot})`;
-const mostRecentTimeSlotAvailable = `div[class="time-slot"]:nth-child(${timeSlot})`;
+const mostRecentTimeSlotAvailable = `.available-slots > div[class="time-slot"]:nth-child(${timeSlot})`;
 const confirmSelection = 'button[id="dialog_book_yes"]';
 
 module.exports.bookGymTime = async (event, context, callback) => {
-  let result = null;
   let browser = null;
   const response = {
     statusCode: 200,
@@ -20,7 +19,7 @@ module.exports.bookGymTime = async (event, context, callback) => {
       'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify({
-      message: result
+      message: ''
     }),
   };
 
@@ -32,7 +31,6 @@ module.exports.bookGymTime = async (event, context, callback) => {
       headless: chromium.headless,
       ignoreHTTPSErrors: true,
     });
-
     let page = await browser.newPage();
 
     await page.goto('https://myfit4less.gymmanager.com/portal/login.asp');
@@ -53,24 +51,16 @@ module.exports.bookGymTime = async (event, context, callback) => {
     //Go to newest day
     await page.click(latestDateSelector);
 
+    await page.waitForSelector(mostRecentTimeSlotAvailable, {visible: true});
+
     //Select earliest time
     await page.click(mostRecentTimeSlotAvailable);
 
     //Confirm
     await page.click(confirmSelection);
-
-    result = "Booking confirmed";
     
   } catch (error) {
-
-    response.statusCode = 400;
-
-    response.body = JSON.stringify({
-      message: error,
-      input: event
-    });
-
-    return callback(null, response);
+    return callback(error);
 
   } finally {
     if (browser !== null) {
@@ -79,7 +69,7 @@ module.exports.bookGymTime = async (event, context, callback) => {
   }
 
   response.body = JSON.stringify({
-    message: result
+    message: 'Booked'
   });
 
   return callback(null, response);
