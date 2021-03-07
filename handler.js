@@ -5,8 +5,9 @@ const chromium = require('chrome-aws-lambda');
 const email = process.env.FIT4LESS_EMAIL;
 const password = process.env.FIT4LESS_PASSWORD;
 const timeSlot = process.env.FIT4LESS_TIMESLOT;
+const daySlot = process.env.FIT4LESS_DAYSLOT;
 
-const latestDateSelector = 'div[id="modal_dates"] > div > div > div[class="modal-body"] > div > div:nth-child(3)';
+const latestDateSelector = `div[id="modal_dates"] > div > div > div[class="modal-body"] > div > div:nth-child(${daySlot})`;
 const mostRecentTimeSlotAvailable = `div[class="time-slot"]:nth-child(${timeSlot})`;
 const confirmSelection = 'button[id="dialog_book_yes"]';
 
@@ -33,6 +34,8 @@ module.exports.bookGymTime = async (event, context, callback) => {
     });
 
     let page = await browser.newPage();
+
+    await page.goto('https://myfit4less.gymmanager.com/portal/login.asp');
 
     //Enter email and password
     await page.$eval('#emailaddress', (el, email) => {el.value = email}, email);
